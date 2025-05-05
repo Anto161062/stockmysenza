@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Clienti - MySenza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-blue-200">
+    <img src="logo-mysenza.png" alt="Logo MySenza" class="mx-auto mb-4 max-w-[120px]">
+    <h1 class="text-2xl font-bold text-center mb-6 text-blue-800">Gestione Clienti</h1>
+    <form id="formCliente" class="space-y-4">
+      <input type="text" id="nomeCliente" placeholder="Nome Cliente" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <select id="tipoCliente" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-blue-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Tipo Cliente</option>
+        <option value="Privato">Privato</option>
+        <option value="Rivenditore">Rivenditore</option>
+        <option value="Farmacia">Farmacia</option>
+      </select>
+      <input type="text" id="contattoCliente" placeholder="Contatto (es. telefono)" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <input type="email" id="emailCliente" placeholder="Email" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <textarea id="noteCliente" placeholder="Note aggiuntive" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+      <button type="submit" class="w-full bg-gradient-to-r from-blue-300 to-blue-400 text-white font-semibold py-2 px-4 rounded-lg hover:from-blue-400 hover:to-blue-500 hover:scale-105 transition shadow-md">Salva Cliente</button>
+    </form>
+    <div id="listaClienti" class="mt-8 space-y-4"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formCliente');
+    const clienti = JSON.parse(localStorage.getItem('clienti')) || [];
+
+    function salvaClienti() {
+      localStorage.setItem('clienti', JSON.stringify(clienti));
+      mostraClienti();
+    }
+
+    function mostraClienti() {
+      const container = document.getElementById('listaClienti');
+      container.innerHTML = '';
+      clienti.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-lg shadow-md border border-blue-200';
+        card.innerHTML = `
+          <p><strong class="text-blue-900">Nome:</strong> ${c.nome}</p>
+          <p><strong class="text-blue-900">Tipo:</strong> ${c.tipo}</p>
+          <p><strong class="text-blue-900">Contatto:</strong> ${c.contatto}</p>
+          <p><strong class="text-blue-900">Email:</strong> ${c.email}</p>
+          <p><strong class="text-blue-900">Note:</strong> ${c.note}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const nuovo = {
+        nome: form.nomeCliente.value.trim(),
+        tipo: form.tipoCliente.value,
+        contatto: form.contattoCliente.value.trim(),
+        email: form.emailCliente.value.trim(),
+        note: form.noteCliente.value.trim()
+      };
+      clienti.push(nuovo);
+      salvaClienti();
+      form.reset();
+    };
+
+    mostraClienti();
+  </script>
+</body>
+</html>
