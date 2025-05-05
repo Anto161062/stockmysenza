@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,7 +6,7 @@
   <title>Magazzino MySenza</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Arial', sans-serif;
       padding: 20px;
       background: #f4f4f4;
     }
@@ -20,6 +19,9 @@
       margin-bottom: 15px;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
     input, button, select {
       width: 100%;
@@ -30,6 +32,9 @@
     img {
       max-width: 100px;
       margin-top: 10px;
+    }
+    .etichetta {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -65,11 +70,12 @@
         const blocco = document.createElement('div');
         blocco.className = 'prodotto';
         blocco.innerHTML = `
-          <strong>${p.nome}</strong> (${p.codice})<br/>
-          Quantità: ${p.quantita}<br/>
-          Formato: ${p.formato || '-'}<br/>
-          Prezzo: €${p.prezzo}<br/>
-          Scadenza: ${p.scadenza || '-'}<br/>
+          <div class="etichetta">Nome:</div> ${p.nome}<br/>
+          <div class="etichetta">Codice:</div> ${p.codice}<br/>
+          <div class="etichetta">Quantità:</div> ${p.quantita}<br/>
+          <div class="etichetta">Formato:</div> ${p.formato || '-'}<br/>
+          <div class="etichetta">Prezzo:</div> €${p.prezzo}<br/>
+          <div class="etichetta">Scadenza:</div> ${p.scadenza || '-'}<br/>
           ${p.img ? `<img src="${p.img}" />` : ''}
         `;
         div.appendChild(blocco);
