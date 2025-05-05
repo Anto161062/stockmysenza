@@ -3,88 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magazzino MySenza</title>
+  <title>MySenza Gestionale</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-50 min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-blue-200">
-    <h1 class="text-3xl font-bold text-center mb-6 text-blue-800">Magazzino MySenza</h1>
-    <form id="form" class="space-y-4">
-      <input type="text" id="codice" placeholder="Codice Prodotto" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="text" id="nome" placeholder="Nome Prodotto" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="number" id="quantita" placeholder="Quantità" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="text" id="formato" placeholder="Formato (es. 100g)" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="number" id="prezzo" placeholder="Prezzo unitario (€)" step="0.01" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="date" id="scadenza" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="file" id="immagine" accept="image/*" class="transition transform hover:scale-105 w-full text-black">
-      <button type="submit" class="w-full bg-gradient-to-r from-blue-300 to-blue-400 text-white font-semibold py-2 px-4 rounded-lg hover:from-blue-400 hover:to-blue-500 hover:scale-105 transition shadow-md">Aggiungi/aggiorna prodotto</button>
-    </form>
-    <div id="magazzino" class="mt-8 space-y-4"></div>
+  <div class="w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-blue-200 text-center">
+    <img src="https://raw.githubusercontent.com/Anto161062/brand/main/mysenza-logo.png" alt="MySenza Logo" class="mx-auto mb-6 max-w-[200px]">
+    <h1 class="text-2xl font-bold text-blue-800 mb-6">Benvenuto nel Gestionale MySenza</h1>
+    <div class="space-y-4">
+      <a href="#" onclick="window.location.href='prodotti.html'" class="block w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 transition">Gestione Prodotti</a>
+      <a href="#" onclick="window.location.href='fornitori.html'" class="block w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 transition">Gestione Fornitori</a>
+      <a href="#" onclick="window.location.href='clienti.html'" class="block w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 transition">Gestione Clienti</a>
+      <a href="#" onclick="window.location.href='magazzino.html'" class="block w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 transition">Accesso Magazzino</a>
+    </div>
   </div>
-
-  <script>
-    const form = document.getElementById('form');
-    const magazzino = JSON.parse(localStorage.getItem('magazzino')) || {};
-
-    function salva() {
-      localStorage.setItem('magazzino', JSON.stringify(magazzino));
-      mostraMagazzino();
-    }
-
-    function mostraMagazzino() {
-      const div = document.getElementById('magazzino');
-      div.innerHTML = '';
-      for (let codice in magazzino) {
-        const p = magazzino[codice];
-        const blocco = document.createElement('div');
-        blocco.className = 'bg-white p-4 rounded-lg shadow-md border border-blue-200';
-        blocco.innerHTML = `
-          <p><strong class="text-blue-900">Nome:</strong> ${p.nome}</p>
-          <p><strong class="text-blue-900">Codice:</strong> ${p.codice}</p>
-          <p><strong class="text-blue-900">Quantità:</strong> ${p.quantita}</p>
-          <p><strong class="text-blue-900">Formato:</strong> ${p.formato || '-'}</p>
-          <p><strong class="text-blue-900">Prezzo:</strong> €${p.prezzo}</p>
-          <p><strong class="text-blue-900">Scadenza:</strong> ${p.scadenza || '-'}</p>
-          ${p.img ? `<img src="${p.img}" class="mt-2 max-h-24 rounded">` : ''}
-        `;
-        div.appendChild(blocco);
-      }
-    }
-
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      const codice = form.codice.value.trim();
-      const nome = form.nome.value.trim();
-      const quantita = parseInt(form.quantita.value);
-      const formato = form.formato.value.trim();
-      const prezzo = parseFloat(form.prezzo.value);
-      const scadenza = form.scadenza.value;
-      const file = form.immagine.files[0];
-
-      let img = '';
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          img = reader.result;
-          aggiornaMagazzino();
-        };
-        reader.readAsDataURL(file);
-      } else {
-        aggiornaMagazzino();
-      }
-
-      function aggiornaMagazzino() {
-        if (magazzino[codice]) {
-          magazzino[codice].quantita += quantita;
-        } else {
-          magazzino[codice] = { codice, nome, quantita, formato, prezzo, scadenza, img };
-        }
-        salva();
-        form.reset();
-      }
-    };
-
-    mostraMagazzino();
-  </script>
 </body>
 </html>
