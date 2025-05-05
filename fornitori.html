@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Fornitori - MySenza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-blue-200">
+    <img src="logo-mysenza.png" alt="Logo MySenza" class="mx-auto mb-4 max-w-[120px]">
+    <h1 class="text-2xl font-bold text-center mb-6 text-blue-800">Gestione Fornitori</h1>
+    <form id="formFornitore" class="space-y-4">
+      <input type="text" id="nomeFornitore" placeholder="Nome Fornitore" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <input type="text" id="tipoFornitore" placeholder="Tipologia (es. integratori, profumi...)" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <input type="text" id="contattoFornitore" placeholder="Contatto (es. telefono)" required class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <input type="email" id="emailFornitore" placeholder="Email" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <textarea id="noteFornitore" placeholder="Note aggiuntive" class="transition transform hover:scale-105 w-full px-4 py-2 border border-blue-300 rounded-lg bg-gradient-to-r from-blue-100 to-blue-50 text-black placeholder-blue-600 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+      <button type="submit" class="w-full bg-gradient-to-r from-blue-300 to-blue-400 text-white font-semibold py-2 px-4 rounded-lg hover:from-blue-400 hover:to-blue-500 hover:scale-105 transition shadow-md">Salva Fornitore</button>
+    </form>
+    <div id="listaFornitori" class="mt-8 space-y-4"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formFornitore');
+    const fornitori = JSON.parse(localStorage.getItem('fornitori')) || [];
+
+    function salvaFornitori() {
+      localStorage.setItem('fornitori', JSON.stringify(fornitori));
+      mostraFornitori();
+    }
+
+    function mostraFornitori() {
+      const container = document.getElementById('listaFornitori');
+      container.innerHTML = '';
+      fornitori.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-lg shadow-md border border-blue-200';
+        card.innerHTML = `
+          <p><strong class="text-blue-900">Nome:</strong> ${f.nome}</p>
+          <p><strong class="text-blue-900">Tipo:</strong> ${f.tipo}</p>
+          <p><strong class="text-blue-900">Contatto:</strong> ${f.contatto}</p>
+          <p><strong class="text-blue-900">Email:</strong> ${f.email}</p>
+          <p><strong class="text-blue-900">Note:</strong> ${f.note}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const nuovo = {
+        nome: form.nomeFornitore.value.trim(),
+        tipo: form.tipoFornitore.value.trim(),
+        contatto: form.contattoFornitore.value.trim(),
+        email: form.emailFornitore.value.trim(),
+        note: form.noteFornitore.value.trim()
+      };
+      fornitori.push(nuovo);
+      salvaFornitori();
+      form.reset();
+    };
+
+    mostraFornitori();
+  </script>
+</body>
+</html>
